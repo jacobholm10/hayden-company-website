@@ -23,9 +23,40 @@ export default function ContactForm() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+
+    const formData = new FormData(e.currentTarget);
+
+    const items = ITEMS_TO_MOVE
+      .filter((item) => formData.get(`item-${item.toLowerCase().replace(/\s+/g, "-")}`) === "on")
+      .join(", ");
+
+    const supplies = ["Mattress Boxes", "Wardrobe Boxes", "Packing Supplies (tape, paper, etc.)"]
+      .filter((item) => formData.get(`supplies-${item.toLowerCase().replace(/[\s(),.]+/g, "-")}`) === "on")
+      .join(", ");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          service: formData.get("service"),
+          date: formData.get("date") || null,
+          message: formData.get("message"),
+          items: items || null,
+          supplies: supplies || null,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Submission failed");
+      setIsSubmitted(true);
+    } catch {
+      alert("Something went wrong. Please try calling us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (isSubmitted) {
