@@ -6,6 +6,27 @@ export const metadata: Metadata = {
   title: "About Us | Finn's Family Moving",
   description:
     "Learn about Finn's Family Moving - your trusted local moving and junk removal service. Family-owned and operated.",
+  openGraph: {
+    title: "About Us | Finn's Family Moving",
+    description:
+      "Learn about Finn's Family Moving - your trusted local moving and junk removal service in the Twin Cities. Family-owned and operated.",
+    url: "https://finnsfamilymoving.com/about",
+    images: [
+      {
+        url: "/photos/loading-truck.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Finn's Family Moving team loading the truck",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us | Finn's Family Moving",
+    description:
+      "Learn about Finn's Family Moving - your trusted local moving and junk removal service in the Twin Cities.",
+    images: ["/photos/loading-truck.jpg"],
+  },
 };
 
 export default function AboutPage() {

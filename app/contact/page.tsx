@@ -6,7 +6,28 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Us | Finn's Family Moving",
   description:
-    "Get a free quote from Finn's Family Moving. Contact us for moving and junk removal services.",
+    "Get a free quote from Finn's Family Moving. Contact us for moving and junk removal services in the Twin Cities.",
+  openGraph: {
+    title: "Contact Us | Finn's Family Moving",
+    description:
+      "Get a free quote from Finn's Family Moving. Contact us for moving and junk removal services in the Twin Cities.",
+    url: "https://finnsfamilymoving.com/contact",
+    images: [
+      {
+        url: "/photos/moving-mattress.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Finn's Family Moving team at work",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Us | Finn's Family Moving",
+    description:
+      "Get a free quote from Finn's Family Moving. Contact us for moving and junk removal services in the Twin Cities.",
+    images: ["/photos/moving-mattress.jpg"],
+  },
 };
 
 export default function ContactPage() {
