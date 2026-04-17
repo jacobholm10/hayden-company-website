@@ -35,9 +35,67 @@ const PHOTOS = [
   { src: "/photos/junk-removal.jpg", alt: "Junk removal service", span: "" },
 ];
 
+const TESTIMONIALS = [
+  {
+    quote: "They showed up right on time and had our entire apartment packed and loaded in under three hours. Nothing was scratched or dented — they wrapped everything like pros. Honestly the smoothest move I've ever had.",
+    name: "Sarah M.",
+    service: "Local Move",
+    rating: 5,
+  },
+  {
+    quote: "We had a basement full of junk we'd been putting off for years. The guys were super friendly, worked fast, and the price was exactly what they quoted. No surprises. I'd call them again in a heartbeat.",
+    name: "David R.",
+    service: "Junk Removal",
+    rating: 5,
+  },
+  {
+    quote: "Moved my 90-year-old mother out of her home of 40 years. The crew was so patient and careful with her things — they treated every box like it was their own grandmother's. Can't recommend them enough.",
+    name: "Jennifer L.",
+    service: "Local Move",
+    rating: 5,
+  },
+  {
+    quote: "Called on a Wednesday and they fit us in by Friday. Fair price, hard workers, and genuinely nice guys. They even helped us rearrange furniture in the new place without being asked.",
+    name: "Marcus T.",
+    service: "Local Move",
+    rating: 5,
+  },
+];
+
+const reviewsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "MovingCompany",
+  name: "Finn's Family Moving",
+  url: "https://finnsfamilymoving.com",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: (
+      TESTIMONIALS.reduce((sum, t) => sum + t.rating, 0) / TESTIMONIALS.length
+    ).toFixed(1),
+    reviewCount: TESTIMONIALS.length,
+    bestRating: 5,
+    worstRating: 1,
+  },
+  review: TESTIMONIALS.map((t) => ({
+    "@type": "Review",
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: t.rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    author: { "@type": "Person", name: t.name },
+    reviewBody: t.quote,
+  })),
+};
+
 export default function Home() {
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
+      />
       {/* Hero Section - Full-bleed photo */}
       <section className="relative min-h-[90vh] flex items-end">
         <Image
@@ -56,7 +114,7 @@ export default function Home() {
               <span className="w-2 h-2 bg-white rounded-full" />
               Family-Owned & Operated
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] animate-fade-up animate-delay-100">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Moving made
               <span className="text-warm-400"> simple.</span>
             </h1>
@@ -232,39 +290,23 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                quote: "They showed up right on time and had our entire apartment packed and loaded in under three hours. Nothing was scratched or dented — they wrapped everything like pros. Honestly the smoothest move I've ever had.",
-                name: "Sarah M.",
-                service: "Local Move",
-              },
-              {
-                quote: "We had a basement full of junk we'd been putting off for years. The guys were super friendly, worked fast, and the price was exactly what they quoted. No surprises. I'd call them again in a heartbeat.",
-                name: "David R.",
-                service: "Junk Removal",
-              },
-              {
-                quote: "Moved my 90-year-old mother out of her home of 40 years. The crew was so patient and careful with her things — they treated every box like it was their own grandmother's. Can't recommend them enough.",
-                name: "Jennifer L.",
-                service: "Local Move",
-              },
-              {
-                quote: "Called on a Wednesday and they fit us in by Friday. Fair price, hard workers, and genuinely nice guys. They even helped us rearrange furniture in the new place without being asked.",
-                name: "Marcus T.",
-                service: "Local Move",
-              },
-            ].map(({ quote, name, service }) => (
+            {TESTIMONIALS.map(({ quote, name, service, rating }) => (
               <div
                 key={name}
                 className="bg-white rounded-2xl p-8 border border-charcoal-100 flex flex-col"
               >
-                <div className="flex gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                <div
+                  className="flex gap-0.5 mb-4"
+                  role="img"
+                  aria-label={`Rated ${rating} out of 5 stars`}
+                >
+                  {[...Array(rating)].map((_, i) => (
                     <svg
                       key={i}
                       className="w-4 h-4 text-warm-500"
                       fill="currentColor"
                       viewBox="0 0 20 20"
+                      aria-hidden="true"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
@@ -275,7 +317,7 @@ export default function Home() {
                 </p>
                 <div className="mt-6 pt-5 border-t border-charcoal-100">
                   <p className="font-semibold text-sm">{name}</p>
-                  <p className="text-xs text-charcoal-400 mt-0.5">{service}</p>
+                  <p className="text-xs text-charcoal-500 mt-0.5">{service}</p>
                 </div>
               </div>
             ))}

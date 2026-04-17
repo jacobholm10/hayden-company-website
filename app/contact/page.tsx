@@ -66,7 +66,7 @@ export default function ContactPage() {
                 <h2 className="text-xl font-bold tracking-tight mb-1">
                   Request a Free Quote
                 </h2>
-                <p className="text-sm text-charcoal-400 mb-8">
+                <p className="text-sm text-charcoal-500 mb-8">
                   Fill out the form below and we&apos;ll get back to you within 24 hours.
                 </p>
                 <ContactForm />
@@ -122,7 +122,7 @@ export default function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-charcoal-400 mb-0.5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-charcoal-500 mb-0.5">
                         {label}
                       </p>
                       {href ? (
@@ -135,7 +135,7 @@ export default function ContactPage() {
                       ) : (
                         <p className="text-sm font-medium text-charcoal-900">{value}</p>
                       )}
-                      {sub && <p className="text-xs text-charcoal-400 mt-0.5">{sub}</p>}
+                      {sub && <p className="text-xs text-charcoal-500 mt-0.5">{sub}</p>}
                     </div>
                   </div>
                 ))}

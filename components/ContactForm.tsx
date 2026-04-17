@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { CONTACT } from "@/lib/constants";
 
 const ITEMS_TO_MOVE = [
   "Boxes",
@@ -15,14 +16,18 @@ const ITEMS_TO_MOVE = [
   "Miscellaneous",
 ];
 
+const TODAY_ISO = new Date().toISOString().split("T")[0];
+
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [serviceType, setServiceType] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
     const formData = new FormData(e.currentTarget);
 
@@ -53,7 +58,7 @@ export default function ContactForm() {
       if (!res.ok) throw new Error("Submission failed");
       setIsSubmitted(true);
     } catch {
-      alert("Something went wrong. Please try calling us directly.");
+      setError("We couldn't send your message. Please try again in a moment.");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +81,7 @@ export default function ContactForm() {
   }
 
   const inputClasses =
-    "w-full px-4 py-3 bg-white border border-charcoal-200 rounded-xl text-sm focus:ring-2 focus:ring-warm-500/20 focus:border-warm-500 outline-none transition-all duration-200 placeholder:text-charcoal-300";
+    "w-full px-4 py-3 bg-white border border-charcoal-200 rounded-xl text-sm focus:ring-2 focus:ring-warm-500/20 focus:border-warm-500 outline-none transition-all duration-200 placeholder:text-charcoal-500";
   const labelClasses = "block text-sm font-medium text-charcoal-700 mb-1.5";
 
   return (
@@ -105,7 +110,7 @@ export default function ContactForm() {
             name="phone"
             required
             className={inputClasses}
-            placeholder="(612) 578-2416"
+            placeholder="(555) 123-4567"
           />
         </div>
       </div>
@@ -194,6 +199,7 @@ export default function ContactForm() {
           type="date"
           id="date"
           name="date"
+          min={TODAY_ISO}
           className={inputClasses}
         />
       </div>
@@ -211,6 +217,24 @@ export default function ContactForm() {
           placeholder="Tell us about your moving or junk removal needs..."
         />
       </div>
+
+      {error && (
+        <div
+          role="alert"
+          className="bg-red-50 border border-red-200 rounded-xl p-4"
+        >
+          <p className="text-sm font-semibold text-red-900">
+            Something went wrong
+          </p>
+          <p className="text-sm text-red-800 mt-1">{error}</p>
+          <a
+            href={CONTACT.phoneHref}
+            className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-red-900 underline underline-offset-2 hover:text-red-700"
+          >
+            Or call {CONTACT.phone} directly
+          </a>
+        </div>
+      )}
 
       <button
         type="submit"
