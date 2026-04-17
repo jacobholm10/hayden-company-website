@@ -23,19 +23,21 @@ export async function createSession(): Promise<string> {
   return token;
 }
 
-export async function validateSession(): Promise<boolean> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_session")?.value;
+export async function isTokenValid(token: string | undefined | null): Promise<boolean> {
   if (!token) return false;
-
   const sql = getDb();
   const result = await sql`
     SELECT id FROM admin_sessions
     WHERE token = ${token} AND expires_at > NOW()
     LIMIT 1
   `;
-
   return result.length > 0;
+}
+
+export async function validateSession(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_session")?.value;
+  return isTokenValid(token);
 }
 
 export async function deleteSession(token: string) {

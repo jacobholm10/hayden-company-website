@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db/index";
+import { sendContactNotification } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +16,12 @@ export async function POST(request: NextRequest) {
       INSERT INTO form_submissions (name, email, phone, service, preferred_date, message, items, supplies)
       VALUES (${name}, ${email}, ${phone}, ${service}, ${date || null}, ${message}, ${items || null}, ${supplies || null})
     `;
+
+    try {
+      await sendContactNotification({ name, email, phone, service, date, message, items, supplies });
+    } catch (emailError) {
+      console.error("Failed to send notification email:", emailError);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
